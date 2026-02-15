@@ -17,7 +17,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Sreeven Projects | Where Divine Vision Meets Engineering Excellence",
+  title: "Sreeven Projects",
   description:
     "Building tomorrow's landmarks today. Expert residential, commercial, renovation, and infrastructure construction services with precision, quality, and divine dedication.",
   keywords: ["construction", "engineering", "architecture", "residential construction", "commercial construction", "infrastructure", "Hyderabad", "Sreeven Projects"],

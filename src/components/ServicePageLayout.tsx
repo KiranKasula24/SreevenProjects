@@ -344,6 +344,43 @@ export default function ServicePageLayout({
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSending(true);
+    setSubmitMessage(null);
+    setSubmitError(null);
+
+    const formData = new FormData(e.currentTarget);
+    const payload = {
+      name: String(formData.get("name") ?? ""),
+      email: String(formData.get("email") ?? ""),
+      phone: String(formData.get("phone") ?? ""),
+      projectType: serviceName,
+      budget: String(formData.get("budget") ?? ""),
+      message: String(formData.get("message") ?? ""),
+      source: "booking" as const,
+    };
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send booking request");
+      }
+
+      setSubmitMessage("Booking request sent! We'll contact you shortly.");
+      e.currentTarget.reset();
+    } catch (error) {
+      setSubmitError("Something went wrong. Please try again.");
+    } finally {
+      setSending(false);
+    }
+  };
+
   return (
     <div className="relative bg-black text-slate-100">
       <div className="pointer-events-none fixed inset-0 z-0 opacity-28">
@@ -393,7 +430,7 @@ export default function ServicePageLayout({
                     className="relative"
                   >
                     <div className="grid items-center gap-8 md:grid-cols-2">
-                      <div className="relative h-[400px] overflow-hidden rounded-2xl ring-1 ring-white/30">
+                      <div className="relative h-100 overflow-hidden rounded-2xl ring-1 ring-white/30">
                         <Image
                           src={slides[currentSlide].image}
                           alt={slides[currentSlide].title}
@@ -521,7 +558,7 @@ export default function ServicePageLayout({
                 {benefits.map((benefit, index) => (
                   <div key={index} className="flex items-start gap-3">
                     <CheckCircle2
-                      className="mt-1 flex-shrink-0 text-amber-400"
+                      className="mt-1 shrink-0 text-amber-400"
                       size={20}
                     />
                     <p className="text-slate-200">{benefit}</p>
@@ -530,7 +567,7 @@ export default function ServicePageLayout({
               </div>
             </div>
             <div className="bento-card rounded-2xl p-0">
-              <div className="relative h-[500px] w-full">
+              <div className="relative h-125 w-full">
                 <Image
                   src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1100&q=80"
                   alt="Construction site"
@@ -595,49 +632,7 @@ export default function ServicePageLayout({
 
             <form
               className="bento-card mx-auto mt-12 max-w-2xl rounded-2xl"
-              onSubmit={async (event) => {
-                event.preventDefault();
-                setSubmitMessage(null);
-                setSubmitError(null);
-                setSending(true);
-                const form = event.currentTarget;
-                const formData = new FormData(form);
-                const payload = {
-                  name: String(formData.get("name") ?? ""),
-                  email: String(formData.get("email") ?? ""),
-                  phone: String(formData.get("phone") ?? ""),
-                  projectType: serviceName,
-                  message: String(formData.get("message") ?? ""),
-                };
-                try {
-                  const response = await fetch("/api/contact", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload),
-                  });
-                  const result = (await response.json()) as {
-                    inquiryId?: string;
-                    error?: string;
-                  };
-                  if (!response.ok)
-                    throw new Error(
-                      result.error ??
-                        "Unable to submit inquiry. Please try again.",
-                    );
-                  form.reset();
-                  setSubmitMessage(
-                    `Booking request submitted successfully. Reference: ${result.inquiryId ?? "INQ-PENDING"}`,
-                  );
-                } catch (error) {
-                  setSubmitError(
-                    error instanceof Error
-                      ? error.message
-                      : "Unable to submit booking request. Please try again.",
-                  );
-                } finally {
-                  setSending(false);
-                }
-              }}
+              onSubmit={handleSubmit}
             >
               <div className="grid gap-4 sm:grid-cols-2">
                 <input

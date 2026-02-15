@@ -61,9 +61,9 @@ const navItems = [
 ];
 
 const statItems = [
-  { label: "Years in Business", value: 25, suffix: "+", icon: Clock3 },
-  { label: "Projects Completed", value: 500, suffix: "+", icon: Building2 },
-  { label: "Happy Clients", value: 300, suffix: "+", icon: Users },
+  { label: "Years in Business", value: 20, suffix: "+", icon: Clock3 },
+  { label: "Projects Completed", value: 100, suffix: "+", icon: Building2 },
+  { label: "Happy Clients", value: 100, suffix: "+", icon: Users },
   { label: "Team Members", value: 50, suffix: "+", icon: HardHat },
 ];
 
@@ -100,63 +100,48 @@ const serviceItems = [
 
 const projects = [
   {
-    name: "Skyline Crest Residences",
+    name: "Residential Haven",
     category: "Residential",
-    location: "Hyderabad",
+    location: "Hastinapur, L.B.Nagar, Hyderabad",
     duration: "18 Months",
-    size: "420K sq.ft",
-    image:
-      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=900&q=80",
+    size: "2500 sq.ft",
+    image: "/projects/residential/project2.jpeg",
     isHero: false,
   },
   {
-    name: "Cobalt Tech Park",
+    name: "Porsche Showroom",
     category: "Commercial",
-    location: "Bengaluru",
+    location: "Banjara Hills, Hyderabad",
     duration: "14 Months",
-    size: "310K sq.ft",
-    image:
-      "https://images.unsplash.com/photo-1448630360428-65456885c650?auto=format&fit=crop&w=900&q=80",
+    size: "5000 sq.ft",
+    image: "/projects/commercial/project1.jpeg",
     isHero: false,
   },
   {
-    name: "Heritage Villa Renewal",
-    category: "Renovation",
-    location: "Chennai",
-    duration: "9 Months",
-    size: "48K sq.ft",
-    image:
-      "https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=900&q=80",
-    isHero: false,
-  },
-  {
-    name: "Azure Corporate Spine",
-    category: "Commercial",
-    location: "Mumbai",
-    duration: "20 Months",
-    size: "500K sq.ft",
-    image:
-      "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=900&q=80",
-    isHero: false,
-  },
-  {
-    name: "Palmwood Residential Cluster",
+    name: "G+1 Villa",
     category: "Residential",
-    location: "Pune",
-    duration: "12 Months",
-    size: "260K sq.ft",
-    image:
-      "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=900&q=80",
+    location: "Moinabad, Hyderabad",
+    duration: "9 Months",
+    size: "5000 sq.ft",
+    image: "/projects/residential/project3.jpeg",
     isHero: false,
   },
   {
-    name: "Civic Hall Retrofit",
-    category: "Renovation",
-    location: "Vijayawada",
-    duration: "8 Months",
-    size: "70K sq.ft",
-    image:
-      "https://images.unsplash.com/photo-1431576901776-e539bd916ba2?auto=format&fit=crop&w=900&q=80",
+    name: "G+1 Villa *",
+    category: "Residential",
+    location: "Moinabad, Hyderabad",
+    duration: "9 Months",
+    size: "5000 sq.ft",
+    image: "/projects/residential/project4.jpeg",
+    isHero: false,
+  },
+  {
+    name: "G+1 Villa **",
+    category: "Residential",
+    location: "Moinabad, Hyderabad",
+    duration: "9 Months",
+    size: "5000 sq.ft",
+    image: "/projects/residential/project5.jpeg",
     isHero: false,
   },
 ] as const;
@@ -476,9 +461,9 @@ export default function Home() {
     if (isHovered) return;
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % allSlides.length);
-    }, 8000);
+    }, 5000); // Changed to 5 seconds
     return () => clearInterval(timer);
-  }, [isHovered]);
+  }, []);
 
   const filteredProjects = useMemo(
     () =>
@@ -535,136 +520,94 @@ export default function Home() {
           <DynamicAurora />
           <div className="section-shell relative z-10 flex min-h-[82vh] items-center justify-center">
             <div className="relative w-full max-w-5xl">
-              <div
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-              >
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={currentSlide}
-                    initial={{ opacity: 0, x: 100 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -100 }}
-                    transition={{ duration: 0.7 }}
-                    className="relative"
-                  >
-                    {currentSlideData.isHero ? (
-                      <div className="text-center">
-                        <div className="relative mx-auto mb-8 h-24 w-24 overflow-hidden rounded-2xl ring-1 ring-white/40">
-                          <Image
-                            src={currentSlideData.image}
-                            alt="Sreeven Projects mark"
-                            fill
-                            sizes="96px"
-                            className="object-cover"
-                          />
-                        </div>
-                        <h1 className="text-glow shiny-gold-loop text-4xl font-semibold leading-tight text-white sm:text-6xl">
-                          Where Vision Meets Structure
-                        </h1>
-                        <p className="shiny-gold-loop mx-auto mt-6 max-w-2xl text-base text-slate-200 sm:text-lg">
-                          We design and build iconic residential, commercial,
-                          and infrastructure projects with precision and speed.
-                        </p>
-                        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-                          <a
-                            href="#projects"
-                            className="inline-flex items-center gap-2 rounded-full bg-cyan-400 px-7 py-3 text-sm font-semibold text-slate-950"
-                          >
-                            View Projects <ArrowRight size={16} />
-                          </a>
-                          <a
-                            href="#contact"
-                            className="inline-flex items-center rounded-full border border-white/70 px-7 py-3 text-sm font-semibold text-amber-100"
-                          >
-                            Contact Us
-                          </a>
-                        </div>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentSlide}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.6 }}
+                  className="relative"
+                >
+                  {currentSlideData.isHero ? (
+                    <div className="text-center">
+                      <div className="relative mx-auto mb-8 h-32 w-32 overflow-hidden rounded-2xl ring-2 ring-white/40">
+                        <Image
+                          src={currentSlideData.image}
+                          alt="Sreeven Projects mark"
+                          fill
+                          sizes="128px"
+                          className="object-cover"
+                        />
                       </div>
-                    ) : (
-                      <div className="grid items-center gap-8 md:grid-cols-2">
-                        <div className="relative h-[400px] overflow-hidden rounded-2xl ring-1 ring-white/30">
-                          <Image
-                            src={currentSlideData.image}
-                            alt={currentSlideData.name}
-                            fill
-                            sizes="(max-width: 768px) 100vw, 50vw"
-                            className="object-cover"
-                          />
-                          <div className="absolute left-4 top-4 rounded-full bg-cyan-500/30 px-4 py-1.5 text-sm text-amber-100 backdrop-blur-sm">
-                            {currentSlideData.category}
-                          </div>
-                        </div>
-                        <div className="text-center md:text-left">
-                          <h2 className="text-glow text-3xl font-semibold text-white sm:text-5xl">
-                            {currentSlideData.name}
-                          </h2>
-                          <div className="mt-6 space-y-3">
-                            <p className="flex items-center justify-center gap-2 text-slate-200 md:justify-start">
-                              <MapPin size={18} className="text-amber-400" />
-                              {currentSlideData.location}
-                            </p>
-                            <p className="flex items-center justify-center gap-2 text-slate-200 md:justify-start">
-                              <Clock3 size={18} className="text-amber-400" />
-                              Duration: {currentSlideData.duration}
-                            </p>
-                            <p className="flex items-center justify-center gap-2 text-slate-200 md:justify-start">
-                              <Building2 size={18} className="text-amber-400" />
-                              Size: {currentSlideData.size}
-                            </p>
-                          </div>
-                          <div className="mt-8 flex flex-wrap items-center justify-center gap-4 md:justify-start">
-                            <a
-                              href="#contact"
-                              className="inline-flex items-center gap-2 rounded-full bg-cyan-400 px-7 py-3 text-sm font-semibold text-slate-950"
-                            >
-                              Start Your Project <ArrowRight size={16} />
-                            </a>
-                            <a
-                              href="#projects"
-                              className="inline-flex items-center rounded-full border border-white/70 px-7 py-3 text-sm font-semibold text-amber-100"
-                            >
-                              View All Projects
-                            </a>
-                          </div>
-                        </div>
+                      <h1 className="text-glow shiny-gold-loop text-4xl font-semibold leading-tight text-white sm:text-6xl">
+                        Where Vision Meets Structure
+                      </h1>
+                      <p className="shiny-gold-loop mx-auto mt-6 max-w-2xl text-base text-slate-200 sm:text-lg">
+                        We design and build iconic residential, commercial, and
+                        infrastructure projects with precision and speed.
+                      </p>
+                      <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+                        <a
+                          href="#projects"
+                          className="inline-flex items-center gap-2 rounded-full bg-cyan-400 px-7 py-3 text-sm font-semibold text-slate-950"
+                        >
+                          View Projects <ArrowRight size={16} />
+                        </a>
+                        <a
+                          href="#contact"
+                          className="inline-flex items-center rounded-full border border-white/70 px-7 py-3 text-sm font-semibold text-amber-100"
+                        >
+                          Contact Us
+                        </a>
                       </div>
-                    )}
-                  </motion.div>
-                </AnimatePresence>
-
-                <div className="mt-8 flex items-center justify-center gap-4">
-                  <button
-                    onClick={prevSlide}
-                    className="grid h-12 w-12 place-items-center rounded-full border border-white/50 bg-slate-950/50 text-amber-400 backdrop-blur-sm transition hover:border-amber-400/80 hover:bg-slate-900/80"
-                    aria-label="Previous slide"
-                  >
-                    <ChevronLeft size={20} />
-                  </button>
-
-                  <div className="flex gap-2">
-                    {allSlides.map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setCurrentSlide(index)}
-                        className={`h-2 rounded-full transition-all ${
-                          index === currentSlide
-                            ? "w-8 bg-amber-400"
-                            : "w-2 bg-white/30"
-                        }`}
-                        aria-label={`Go to slide ${index + 1}`}
+                    </div>
+                  ) : (
+                    <div className="relative mx-auto h-125 w-full max-w-4xl overflow-hidden rounded-2xl ring-2 ring-white/30">
+                      <Image
+                        src={currentSlideData.image}
+                        alt={currentSlideData.name}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 80vw"
+                        className="object-cover"
+                        priority={currentSlide === 0}
                       />
-                    ))}
-                  </div>
+                    </div>
+                  )}
+                </motion.div>
+              </AnimatePresence>
 
-                  <button
-                    onClick={nextSlide}
-                    className="grid h-12 w-12 place-items-center rounded-full border border-white/50 bg-slate-950/50 text-amber-400 backdrop-blur-sm transition hover:border-amber-400/80 hover:bg-slate-900/80"
-                    aria-label="Next slide"
-                  >
-                    <ChevronRight size={20} />
-                  </button>
+              <div className="mt-8 flex items-center justify-center gap-4">
+                <button
+                  onClick={prevSlide}
+                  className="grid h-12 w-12 place-items-center rounded-full border border-white/50 bg-slate-950/50 text-amber-400 backdrop-blur-sm transition hover:border-amber-400/80 hover:bg-slate-900/80"
+                  aria-label="Previous slide"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+
+                <div className="flex gap-2">
+                  {allSlides.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentSlide(index)}
+                      className={`h-2 rounded-full transition-all ${
+                        index === currentSlide
+                          ? "w-8 bg-amber-400"
+                          : "w-2 bg-white/30"
+                      }`}
+                      aria-label={`Go to slide ${index + 1}`}
+                    />
+                  ))}
                 </div>
+
+                <button
+                  onClick={nextSlide}
+                  className="grid h-12 w-12 place-items-center rounded-full border border-white/50 bg-slate-950/50 text-amber-400 backdrop-blur-sm transition hover:border-amber-400/80 hover:bg-slate-900/80"
+                  aria-label="Next slide"
+                >
+                  <ChevronRight size={20} />
+                </button>
               </div>
             </div>
           </div>
@@ -799,7 +742,7 @@ export default function Home() {
               </div>
             </div>
             <div className="bento-card relative overflow-hidden rounded-2xl p-0">
-              <div className="relative h-[420px] w-full">
+              <div className="relative h-105 w-full">
                 <Image
                   src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1100&q=80"
                   alt="Construction engineering team"
@@ -875,6 +818,7 @@ export default function Home() {
                     phone: String(formData.get("phone") ?? ""),
                     projectType: String(formData.get("projectType") ?? ""),
                     message: String(formData.get("message") ?? ""),
+                    source: "general" as const,
                   };
                   try {
                     const response = await fetch("/api/contact", {
@@ -961,7 +905,7 @@ export default function Home() {
                 <div className="mt-5 space-y-4 text-sm text-slate-200">
                   <p className="flex items-center gap-3">
                     <Phone size={16} className="text-amber-400" />
-                    9030841530
+                    +91-9030841530
                   </p>
                   <p className="flex items-center gap-3">
                     <Mail size={16} className="text-amber-400" />
@@ -969,7 +913,7 @@ export default function Home() {
                   </p>
                   <p className="flex items-center gap-3">
                     <MapPin size={16} className="text-amber-400" />
-                    Jubilee Hills, Hyderabad
+                    #416, 417 Kubera Tower, Narayan guda, Hyderabad
                   </p>
                 </div>
               </aside>
@@ -1043,7 +987,7 @@ export default function Home() {
                 <div className="space-y-3 text-sm text-slate-400">
                   <p className="flex items-center gap-2">
                     <Phone size={14} className="text-amber-400" />
-                    9030841530
+                    +91-9030841530
                   </p>
                   <p className="flex items-center gap-2">
                     <Mail size={14} className="text-amber-400" />
