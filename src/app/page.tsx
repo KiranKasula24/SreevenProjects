@@ -1,3 +1,5 @@
+// src/app/page.tsx - Updated with dropdown navigation
+
 "use client";
 
 import Image from "next/image";
@@ -37,12 +39,22 @@ import {
   Instagram,
   Twitter,
 } from "lucide-react";
+import Link from "next/link";
 
 type ProjectCategory = "All" | "Residential" | "Commercial" | "Renovation";
 
 const navItems = [
   { label: "Home", href: "#home" },
-  { label: "Services", href: "#services" },
+  {
+    label: "Services",
+    href: "#services",
+    dropdown: [
+      { label: "Residential Construction", href: "/services/residential" },
+      { label: "Commercial Projects", href: "/services/commercial" },
+      { label: "Renovations & Remodeling", href: "/services/renovations" },
+      { label: "Infrastructure Development", href: "/services/infrastructure" },
+    ],
+  },
   { label: "Projects", href: "#projects" },
   { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
@@ -61,24 +73,28 @@ const serviceItems = [
     description:
       "Custom homes and gated communities delivered with rigorous standards.",
     icon: HomeIcon,
+    href: "/services/residential",
   },
   {
     title: "Commercial Projects",
     description:
       "Corporate towers and mixed-use spaces engineered for durability and speed.",
     icon: Building2,
+    href: "/services/commercial",
   },
   {
     title: "Renovations & Remodeling",
     description:
       "Transforming existing spaces through precision planning and execution.",
     icon: Wrench,
+    href: "/services/renovations",
   },
   {
     title: "Infrastructure Development",
     description:
       "Roadways, utilities, and industrial foundations built for scale.",
     icon: Ruler,
+    href: "/services/infrastructure",
   },
 ];
 
@@ -170,7 +186,6 @@ const testimonials = [
   },
 ];
 
-// Hero slide definition
 const heroSlide = {
   name: "Sreeven Projects",
   category: "Hero" as const,
@@ -181,7 +196,6 @@ const heroSlide = {
   isHero: true,
 };
 
-// Combined slides array
 const allSlides = [heroSlide, ...projects];
 
 function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
@@ -245,6 +259,7 @@ function NavbarWithGlow({
 }) {
   const ref = useRef<HTMLElement | null>(null);
   const [showGlow, setShowGlow] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const px = useMotionValue(50);
   const py = useMotionValue(50);
   const smoothX = useSpring(px, { stiffness: 260, damping: 24 });
@@ -256,6 +271,7 @@ function NavbarWithGlow({
     px.set(((event.clientX - rect.left) / rect.width) * 100);
     py.set(((event.clientY - rect.top) / rect.height) * 100);
   };
+
   return (
     <header
       ref={ref}
@@ -270,7 +286,7 @@ function NavbarWithGlow({
         animate={{ opacity: showGlow ? 1 : 0 }}
       />
       <div className="relative z-10 flex items-center justify-between">
-        <a href="#home" className="flex items-center gap-3">
+        <Link href="/" className="flex items-center gap-3">
           <div className="relative h-11 w-11 overflow-hidden rounded-xl ring-1 ring-white/45">
             <Image
               src="/logo-mark.png"
@@ -284,16 +300,56 @@ function NavbarWithGlow({
             <p className="font-semibold text-white">Sreeven Projects</p>
             <p className="text-xs text-amber-300/80">Engineering Excellence</p>
           </div>
-        </a>
+        </Link>
         <nav className="hidden items-center gap-8 md:flex">
           {navItems.map((item) => (
-            <a
+            <div
               key={item.href}
-              href={item.href}
-              className="text-sm text-slate-200 transition hover:text-amber-100"
+              className="relative"
+              onMouseEnter={() =>
+                item.dropdown && setActiveDropdown(item.label)
+              }
+              onMouseLeave={() => setActiveDropdown(null)}
             >
-              {item.label}
-            </a>
+              {item.dropdown ? (
+                <>
+                  <button className="flex items-center gap-1 text-sm text-slate-200 transition hover:text-amber-100">
+                    {item.label}
+                    <ChevronDown
+                      size={14}
+                      className={`transition-transform ${activeDropdown === item.label ? "rotate-180" : ""}`}
+                    />
+                  </button>
+                  <AnimatePresence>
+                    {activeDropdown === item.label && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -8 }}
+                        className="absolute left-0 top-full mt-2 w-56 rounded-xl border border-white/25 bg-slate-950/95 p-2 backdrop-blur-xl"
+                      >
+                        {item.dropdown.map((dropdownItem) => (
+                          <Link
+                            key={dropdownItem.href}
+                            href={dropdownItem.href}
+                            className="block rounded-lg px-4 py-2.5 text-sm text-slate-200 transition hover:bg-cyan-500/10 hover:text-amber-100"
+                          >
+                            {dropdownItem.label}
+                          </Link>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </>
+              ) : (
+                <a
+                  href={item.href}
+                  className="text-sm text-slate-200 transition hover:text-amber-100"
+                >
+                  {item.label}
+                </a>
+              )}
+            </div>
           ))}
         </nav>
         <div className="flex items-center gap-2">
@@ -321,14 +377,48 @@ function NavbarWithGlow({
             className="relative z-10 mt-3 space-y-2 rounded-xl border border-white/25 bg-slate-950/92 p-4 md:hidden"
           >
             {navItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className="block rounded-lg px-3 py-2 text-sm text-slate-100"
-                onClick={() => setMenuOpen(false)}
-              >
-                {item.label}
-              </a>
+              <div key={item.href}>
+                {item.dropdown ? (
+                  <>
+                    <button
+                      className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm text-slate-100"
+                      onClick={() =>
+                        setActiveDropdown(
+                          activeDropdown === item.label ? null : item.label,
+                        )
+                      }
+                    >
+                      {item.label}
+                      <ChevronDown
+                        size={14}
+                        className={`transition-transform ${activeDropdown === item.label ? "rotate-180" : ""}`}
+                      />
+                    </button>
+                    {activeDropdown === item.label && (
+                      <div className="ml-4 mt-1 space-y-1">
+                        {item.dropdown.map((dropdownItem) => (
+                          <Link
+                            key={dropdownItem.href}
+                            href={dropdownItem.href}
+                            className="block rounded-lg px-3 py-2 text-sm text-slate-300"
+                            onClick={() => setMenuOpen(false)}
+                          >
+                            {dropdownItem.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <a
+                    href={item.href}
+                    className="block rounded-lg px-3 py-2 text-sm text-slate-100"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {item.label}
+                  </a>
+                )}
+              </div>
             ))}
           </motion.nav>
         )}
@@ -382,7 +472,6 @@ export default function Home() {
     return () => clearInterval(timer);
   }, []);
 
-  // Auto-advance slideshow (8 seconds, pause on hover)
   useEffect(() => {
     if (isHovered) return;
     const timer = setInterval(() => {
@@ -446,7 +535,6 @@ export default function Home() {
           <DynamicAurora />
           <div className="section-shell relative z-10 flex min-h-[82vh] items-center justify-center">
             <div className="relative w-full max-w-5xl">
-              {/* Slideshow Container */}
               <div
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
@@ -461,7 +549,6 @@ export default function Home() {
                     className="relative"
                   >
                     {currentSlideData.isHero ? (
-                      // Hero Slide
                       <div className="text-center">
                         <div className="relative mx-auto mb-8 h-24 w-24 overflow-hidden rounded-2xl ring-1 ring-white/40">
                           <Image
@@ -495,7 +582,6 @@ export default function Home() {
                         </div>
                       </div>
                     ) : (
-                      // Project Slide
                       <div className="grid items-center gap-8 md:grid-cols-2">
                         <div className="relative h-[400px] overflow-hidden rounded-2xl ring-1 ring-white/30">
                           <Image
@@ -547,7 +633,6 @@ export default function Home() {
                   </motion.div>
                 </AnimatePresence>
 
-                {/* Navigation Controls */}
                 <div className="mt-8 flex items-center justify-center gap-4">
                   <button
                     onClick={prevSlide}
@@ -557,7 +642,6 @@ export default function Home() {
                     <ChevronLeft size={20} />
                   </button>
 
-                  {/* Slide Indicators */}
                   <div className="flex gap-2">
                     {allSlides.map((_, index) => (
                       <button
@@ -611,16 +695,18 @@ export default function Home() {
           <SectionHeading title="What We Do" subtitle="Services" />
           <div className="grid gap-5 md:grid-cols-2">
             {serviceItems.map((service) => (
-              <article
-                key={service.title}
-                className="glass-panel rounded-2xl p-7"
-              >
-                <service.icon className="mb-4 text-amber-400" size={26} />
-                <h3 className="text-xl text-white">{service.title}</h3>
-                <p className="mt-3 text-sm text-slate-300">
-                  {service.description}
-                </p>
-              </article>
+              <Link key={service.title} href={service.href}>
+                <article className="glass-panel rounded-2xl p-7 transition hover:border-amber-400/50">
+                  <service.icon className="mb-4 text-amber-400" size={26} />
+                  <h3 className="text-xl text-white">{service.title}</h3>
+                  <p className="mt-3 text-sm text-slate-300">
+                    {service.description}
+                  </p>
+                  <div className="mt-4 flex items-center gap-2 text-sm text-amber-300">
+                    Learn More <ArrowRight size={14} />
+                  </div>
+                </article>
+              </Link>
             ))}
           </div>
         </section>
@@ -891,11 +977,9 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Footer Section */}
         <footer className="border-t border-white/10 bg-slate-950/80 py-12">
           <div className="section-shell">
             <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
-              {/* Company Info */}
               <div>
                 <div className="flex items-center gap-3">
                   <div className="relative h-12 w-12 overflow-hidden rounded-xl ring-1 ring-white/40">
@@ -920,7 +1004,6 @@ export default function Home() {
                 </p>
               </div>
 
-              {/* Quick Links */}
               <div>
                 <h4 className="mb-4 font-semibold text-white">Quick Links</h4>
                 <ul className="space-y-2 text-sm text-slate-400">
@@ -937,46 +1020,22 @@ export default function Home() {
                 </ul>
               </div>
 
-              {/* Services */}
               <div>
                 <h4 className="mb-4 font-semibold text-white">Services</h4>
                 <ul className="space-y-2 text-sm text-slate-400">
-                  <li>
-                    <a
-                      href="#services"
-                      className="transition hover:text-amber-300"
-                    >
-                      Residential Construction
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#services"
-                      className="transition hover:text-amber-300"
-                    >
-                      Commercial Projects
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#services"
-                      className="transition hover:text-amber-300"
-                    >
-                      Renovations & Remodeling
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#services"
-                      className="transition hover:text-amber-300"
-                    >
-                      Infrastructure Development
-                    </a>
-                  </li>
+                  {serviceItems.map((service) => (
+                    <li key={service.href}>
+                      <Link
+                        href={service.href}
+                        className="transition hover:text-amber-300"
+                      >
+                        {service.title}
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
               </div>
 
-              {/* Contact & Social */}
               <div>
                 <h4 className="mb-4 font-semibold text-white">
                   Connect With Us
@@ -1024,7 +1083,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Copyright */}
             <div className="mt-10 border-t border-white/10 pt-8 text-center text-sm text-slate-500">
               <p>
                 &copy; {new Date().getFullYear()} Sreeven Projects. All rights
