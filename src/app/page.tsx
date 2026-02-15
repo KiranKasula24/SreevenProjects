@@ -53,6 +53,7 @@ const navItems = [
       { label: "Commercial Projects", href: "/services/commercial" },
       { label: "Renovations & Remodeling", href: "/services/renovations" },
       { label: "Infrastructure Development", href: "/services/infrastructure" },
+      { label: "Industrial Construction", href: "/services/industrial" },
     ],
   },
   { label: "Projects", href: "#projects" },
@@ -83,6 +84,13 @@ const serviceItems = [
     href: "/services/commercial",
   },
   {
+    title: "Industrial Construction",
+    description:
+      "Factories, plants, and industrial facilities delivered with safety-first execution.",
+    icon: HardHat,
+    href: "/services/industrial",
+  },
+  {
     title: "Renovations & Remodeling",
     description:
       "Transforming existing spaces through precision planning and execution.",
@@ -102,6 +110,7 @@ const projects = [
   {
     name: "Residential Haven",
     category: "Residential",
+    label: "Residential Construction",
     location: "Hastinapur, L.B.Nagar, Hyderabad",
     duration: "18 Months",
     size: "2500 sq.ft",
@@ -111,6 +120,7 @@ const projects = [
   {
     name: "Porsche Showroom",
     category: "Commercial",
+    label: "Commercial Construction",
     location: "Banjara Hills, Hyderabad",
     duration: "14 Months",
     size: "5000 sq.ft",
@@ -120,6 +130,7 @@ const projects = [
   {
     name: "G+1 Villa",
     category: "Residential",
+    label: "Residential Construction",
     location: "Moinabad, Hyderabad",
     duration: "9 Months",
     size: "5000 sq.ft",
@@ -129,6 +140,7 @@ const projects = [
   {
     name: "G+1 Villa *",
     category: "Residential",
+    label: "Residential Construction",
     location: "Moinabad, Hyderabad",
     duration: "9 Months",
     size: "5000 sq.ft",
@@ -138,6 +150,7 @@ const projects = [
   {
     name: "G+1 Villa **",
     category: "Residential",
+    label: "Residential Construction",
     location: "Moinabad, Hyderabad",
     duration: "9 Months",
     size: "5000 sq.ft",
@@ -146,42 +159,117 @@ const projects = [
   },
 ] as const;
 
-const features = [
-  { title: "Licensed & Certified", icon: ShieldCheck },
-  { title: "Premium Quality Materials", icon: Sparkles },
-  { title: "On-Time Delivery", icon: Clock3 },
-  { title: "Expert Engineering Team", icon: HardHat },
+const projects1 = [
+  {
+    name: "Porsche Showroom",
+    category: "Commercial",
+    label: "Commercial Construction",
+    location: "Banjara Hills, Hyderabad",
+    duration: "14 Months",
+    size: "5000 sq.ft",
+    image: "/projects/commercial/project1.jpeg",
+    isHero: false,
+  },
+  {
+    name: "G+1 Villa *",
+    category: "Residential",
+    label: "Residential Construction",
+    location: "Moinabad, Hyderabad",
+    duration: "9 Months",
+    size: "5000 sq.ft",
+    image: "/projects/residential/project4.jpeg",
+    isHero: false,
+  },
+] as const;
+
+const serviceSlides = [
+  {
+    name: "Dismantling",
+    category: "Service" as const,
+    label: "Dismantling",
+    location: "",
+    duration: "",
+    size: "",
+    image: "/dismantling1.jpeg",
+    isHero: false,
+    isServiceSlide: true,
+  },
+  {
+    name: "Waterproofing",
+    category: "Service" as const,
+    label: "Waterproofing",
+    location: "",
+    duration: "",
+    size: "",
+    image: "/waterproofing1.jpeg",
+    isHero: false,
+    isServiceSlide: true,
+  },
+  {
+    name: "Painting",
+    category: "Service" as const,
+    label: "Painting",
+    location: "",
+    duration: "",
+    size: "",
+    image: "/painting1.jpeg",
+    isHero: false,
+    isServiceSlide: true,
+  },
+  {
+    name: "Interiors",
+    category: "Service" as const,
+    label: "Interiors",
+    location: "",
+    duration: "",
+    size: "",
+    image: "/interiors1.jpeg",
+    isHero: false,
+    isServiceSlide: true,
+  },
 ];
 
 const testimonials = [
   {
-    quote: "Their delivery discipline and quality control were exceptional.",
-    name: "Ananya Reddy",
-    project: "Commercial Tower",
+    quote:
+      "Sreeven Projects transformed our vision into reality with exceptional quality and professionalism.",
+    name: "Rajesh Kumar",
+    project: "Residential Haven Project",
   },
   {
-    quote: "Every milestone was transparent and professional.",
-    name: "Raghav Menon",
-    project: "Luxury Residential",
+    quote:
+      "Their attention to detail and commitment to timelines was outstanding throughout the project.",
+    name: "Priya Sharma",
+    project: "Commercial Office Complex",
   },
   {
-    quote: "They handled complex renovation constraints with confidence.",
-    name: "Suresh Babu",
-    project: "Retail Renovation",
+    quote:
+      "Excellent team that understands the nuances of modern construction and delivers beyond expectations.",
+    name: "Vikram Patel",
+    project: "Industrial Manufacturing Facility",
   },
+];
+
+const features = [
+  { title: "ISO Certified", icon: ShieldCheck },
+  { title: "Safety First", icon: Award },
+  { title: "On-Time Delivery", icon: Clock3 },
+  { title: "Expert Team", icon: Users },
 ];
 
 const heroSlide = {
   name: "Sreeven Projects",
   category: "Hero" as const,
+  label: "Hero",
   location: "Hyderabad",
-  duration: "25+ Years",
-  size: "500+ Projects",
+  duration: "",
+  size: "",
   image: "/logo-mark.png",
   isHero: true,
-};
+  isServiceSlide: false,
+} as const;
 
-const allSlides = [heroSlide, ...projects];
+const allSlides = [heroSlide, ...projects1, ...serviceSlides];
 
 function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
   const ref = useRef<HTMLSpanElement | null>(null);
@@ -440,13 +528,10 @@ export default function Home() {
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
+  const [year, setYear] = useState<number | null>(null); // added
 
   useEffect(() => {
-    const onScroll = () => setNavSolid(window.scrollY > 20);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    setYear(new Date().getFullYear());
   }, []);
 
   useEffect(() => {
@@ -458,7 +543,6 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (isHovered) return;
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % allSlides.length);
     }, 5000); // Changed to 5 seconds
@@ -483,6 +567,13 @@ export default function Home() {
   };
 
   const currentSlideData = allSlides[currentSlide];
+
+  const labelHref =
+    currentSlideData.category === "Residential"
+      ? "/services/residential"
+      : currentSlideData.category === "Commercial"
+        ? "/services/commercial"
+        : null;
 
   return (
     <div className="relative bg-black text-slate-100">
@@ -563,15 +654,82 @@ export default function Home() {
                       </div>
                     </div>
                   ) : (
-                    <div className="relative mx-auto h-125 w-full max-w-4xl overflow-hidden rounded-2xl ring-2 ring-white/30">
-                      <Image
-                        src={currentSlideData.image}
-                        alt={currentSlideData.name}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 80vw"
-                        className="object-cover"
-                        priority={currentSlide === 0}
-                      />
+                    <div className="relative mx-auto w-full max-w-4xl">
+                      {/* Image */}
+                      <div className="relative h-125 w-full overflow-hidden rounded-2xl ring-2 ring-white/30">
+                        <Image
+                          src={currentSlideData.image}
+                          alt={currentSlideData.name}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 80vw"
+                          className="object-cover"
+                          priority={currentSlide === 0}
+                        />
+
+                        {/* Top gradient overlay */}
+                        <div className="absolute inset-x-0 top-0 bg-linear-to-b from-slate-950/60 via-slate-950/20 to-transparent px-6 pb-16 pt-5">
+                          {/* Label badge on image */}
+                          <motion.div
+                            initial={{ opacity: 0, y: -12 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.3 }}
+                            className="flex justify-start"
+                          >
+                            {labelHref ? (
+                              <Link
+                                href={labelHref}
+                                className="inline-flex items-center gap-2 rounded-full border border-amber-400/40 bg-slate-950/60 px-5 py-2.5 text-sm font-semibold text-amber-300 shadow-lg shadow-black/30 backdrop-blur-xl transition hover:border-amber-300 hover:text-amber-200"
+                              >
+                                <Sparkles
+                                  size={14}
+                                  className="text-amber-400"
+                                />
+                                {currentSlideData.label}
+                              </Link>
+                            ) : (
+                              <span className="inline-flex items-center gap-2 rounded-full border border-amber-400/40 bg-slate-950/60 px-5 py-2.5 text-sm font-semibold text-amber-300 shadow-lg shadow-black/30 backdrop-blur-xl">
+                                <Sparkles
+                                  size={14}
+                                  className="text-amber-400"
+                                />
+                                {currentSlideData.label}
+                              </span>
+                            )}
+                          </motion.div>
+                        </div>
+
+                        {/* Bottom gradient overlay with location — only show if location exists */}
+                        {currentSlideData.location && (
+                          <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-slate-950/80 via-slate-950/40 to-transparent px-6 pb-5 pt-16">
+                            <div className="flex flex-wrap items-center justify-between gap-3">
+                              <p className="flex items-center gap-2 text-sm text-slate-200">
+                                <MapPin size={14} className="text-amber-400" />
+                                {currentSlideData.location}
+                              </p>
+                              <div className="flex items-center gap-4 text-xs text-slate-300">
+                                {currentSlideData.duration && (
+                                  <span className="flex items-center gap-1.5">
+                                    <Clock3
+                                      size={13}
+                                      className="text-amber-400"
+                                    />
+                                    {currentSlideData.duration}
+                                  </span>
+                                )}
+                                {currentSlideData.size && (
+                                  <span className="flex items-center gap-1.5">
+                                    <Ruler
+                                      size={13}
+                                      className="text-amber-400"
+                                    />
+                                    {currentSlideData.size}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   )}
                 </motion.div>
@@ -636,7 +794,7 @@ export default function Home() {
 
         <section id="services" className="section-shell py-24">
           <SectionHeading title="What We Do" subtitle="Services" />
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {serviceItems.map((service) => (
               <Link key={service.title} href={service.href}>
                 <article className="glass-panel rounded-2xl p-7 transition hover:border-amber-400/50">
@@ -873,6 +1031,7 @@ export default function Home() {
                     <option>Project Type</option>
                     <option>Residential Construction</option>
                     <option>Commercial Projects</option>
+                    <option>Industrial Construction</option>
                     <option>Renovation & Remodeling</option>
                     <option>Infrastructure Development</option>
                   </select>
@@ -1028,10 +1187,7 @@ export default function Home() {
             </div>
 
             <div className="mt-10 border-t border-white/10 pt-8 text-center text-sm text-slate-500">
-              <p>
-                &copy; {new Date().getFullYear()} Sreeven Projects. All rights
-                reserved.
-              </p>
+              <p>&copy; {year ?? ""} Sreeven Projects. All rights reserved.</p>
             </div>
           </div>
         </footer>

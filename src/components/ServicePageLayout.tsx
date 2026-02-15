@@ -76,6 +76,7 @@ const navItems = [
       { label: "Commercial Projects", href: "/services/commercial" },
       { label: "Renovations & Remodeling", href: "/services/renovations" },
       { label: "Infrastructure Development", href: "/services/infrastructure" },
+      { label: "Industrial Construction", href: "/services/industrial" },
     ],
   },
   { label: "Projects", href: "/#projects" },
@@ -745,6 +746,14 @@ export default function ServicePageLayout({
                       className="transition hover:text-amber-300"
                     >
                       Commercial Projects
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/services/industrial"
+                      className="transition hover:text-amber-300"
+                    >
+                      Industrial Construction
                     </Link>
                   </li>
                   <li>
